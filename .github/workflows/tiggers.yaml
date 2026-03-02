@@ -1,0 +1,28 @@
+name: Variables & Secrets
+on: 
+  schedule:
+    - cron: "* * * * *"
+env:
+  DOCKER_REGISTRY: docker.io
+  DOCKER_IMAGE: actions-nginx
+jobs:
+  Docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker Build
+        run: echo docker build -t ${{ env.DOCKER_REGISTRY}}/${{ vars.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
+      - name: Docker Login
+        run: docker login --username=${{ vars.DOCKER_USERNAME }} --password=${{ secrets.DOCKER_PASSWORD }}
+      - name: Docker Push
+        run: echo docker push ${{ env.DOCKER_REGISTRY}}/${{ vars.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
+        
+  Deploy:
+    needs: [Docker]
+    env:
+      DOCKER_REGISTRY: docker.io
+      DOCKER_USERNAME: sihasaneshubham
+      DOCKER_IMAGE: actions-nginx
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker Run
+        run: echo docker run -d -p 80:80 ${{ env.DOCKER_REGISTRY}}/${{ vars.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
