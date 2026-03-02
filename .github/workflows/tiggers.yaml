@@ -21,7 +21,8 @@ jobs:
     needs: [Docker]
     concurrency:
       group: production-deploy
-      cancel-in-progress: true
+      cancel-in-progress: true # Cancle previous workflow
+     # cancle-in-progress: false # Wait for previous workflow to complete 
     env:
       DOCKER_REGISTRY: docker.io
       DOCKER_USERNAME: sihasaneshubham
@@ -29,6 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Docker Run
+        timeout-minutes: 1 # This can be added at job level & step level
         run: |
           echo docker run -d -p 80:80 ${{ env.DOCKER_REGISTRY}}/${{ vars.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
           sleep 600
