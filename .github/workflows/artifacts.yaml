@@ -1,0 +1,35 @@
+name: Work with Artifacts
+on:
+  push:
+    branches: [main]
+jobs:
+  Build-job:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Install Cowsay Program
+        run: sudo apt install cowsay -y
+      - name: Execute Cowsay
+        run: cowsay -f dragon "Winter is Coming..." >> dragon.txt
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v7.0.0
+        with:
+          name: dragon-artifact
+          path: dragon.txt
+
+  Test-job:
+    needs: [Build-job]
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v8.0.0
+        with:
+          name: dragon-artifact
+
+  Deploy-job:
+    needs: [Build-job, Test-job]
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v8.0.0
+        with:
+          name: dragon-artifact
