@@ -1,0 +1,22 @@
+name: Matrix Workflow
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  deploy-on-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker Info
+        run: docker info
+      - name: List Images
+        run: docker image ls
+
+  deploy-on-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Docker Info
+        run: docker info
+      - name: List Images
+        run: docker image ls
