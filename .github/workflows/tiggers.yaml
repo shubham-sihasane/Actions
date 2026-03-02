@@ -1,5 +1,6 @@
 name: Variables & Secrets
 on: 
+  workflow_dispatch:
   schedule:
     - cron: "* * * * *"
 env:
@@ -25,4 +26,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Docker Run
-        run: echo docker run -d -p 80:80 ${{ env.DOCKER_REGISTRY}}/${{ vars.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
+        run: |
+          echo docker run -d -p 80:80 ${{ env.DOCKER_REGISTRY}}/${{ vars.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE }}:latest
+          sleep 600
